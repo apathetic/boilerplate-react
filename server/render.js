@@ -14,7 +14,7 @@ export function render(url) {
   const filePath = path.resolve(__dirname, '..', 'build', 'index.html')
 
   return new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', (err, htmlData) => {
+    fs.readFile(filePath, 'utf8', (err, indexFile) => {
       if (err) {
         reject('read err', err);
       }
@@ -31,8 +31,9 @@ export function render(url) {
           </StaticRouter>
         </Provider>
       );
+      const response = indexFile.replace('{{SSR}}', markup);
 
-      resolve(htmlData.replace('{{SSR}}', markup));
+      resolve(response);
     });
   });
 }

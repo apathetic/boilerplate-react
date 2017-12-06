@@ -5,8 +5,10 @@ import FirstPage from './pages/FirstPage'
 import SecondPage from './pages/SecondPage'
 import _404 from './pages/_404'
 
-import logo from './assets/icons/logo.svg';
+// import logo from './assets/icons/logo.svg';
 import './App.css';
+
+const logo = '';
 
 class App extends Component {
   render() {

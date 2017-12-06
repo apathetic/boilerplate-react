@@ -9,20 +9,20 @@ import {render} from './render';
 const path = require('path');
 const app = new Koa();
 const router = new Router();
-const rootPath = path.resolve(__dirname, '..', 'build');
+const rootPath = path.resolve(__dirname, '..', 'build/');
+
+
 
 // Routes
 // -----------------------------------------
-router.get ('/', async (context, next) => {
-  const url = context.request.url;
-
+async function renderPage(context, next) {
+  const url = context.url;
   try {
     context.body = await render(url);
   } catch(err) {
     console.error(err);
   }
-  return next();
-});
+}
 
 router.get('/api', (context, next) => {
   context.set({
@@ -33,6 +33,12 @@ router.get('/api', (context, next) => {
   return next();
 });
 
+// router.get('/|/index.html', renderPage);
+router.get('/', renderPage);
+router.get(/\.?/, serve(rootPath)); // anything w/ extension
+router.get('/:page', renderPage);
+
+
 
 // Middlewares
 // -----------------------------------------
@@ -42,7 +48,7 @@ app.use(async (context, next) => {
   const start = Date.now();
   await next();
   const ms = Date.now() - start;
-  console.log(`${context.method} ${context.url} - ${ms}`);
+  console.log(`${context.method} ${context.url} - ${ms}ms`);
 });
 
 // Error Handling
@@ -61,11 +67,9 @@ app.use(async (context, next) => {
 // Support Gzip
 app.use(compression());
 
-// Static
-app.use(serve(rootPath));
-
-// Set up routes
+// Set up Routes
 app.use(router.routes());
+
 
 
 export default app;
