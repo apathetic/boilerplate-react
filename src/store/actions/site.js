@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SPACE_ID, ACCESS_TOKEN } from 'config';
+import { SPACE_ID, ACCESS_TOKEN } from 'src/config';
 
 const API = `https://cdn.contentful.com/spaces/${SPACE_ID}/entries?access_token=${ACCESS_TOKEN}&content_type=site`;
 
